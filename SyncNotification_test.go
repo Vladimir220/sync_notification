@@ -34,7 +34,7 @@ func TestSyncNotification(t *testing.T) {
 	go f(2, sn)
 	wg.Wait()
 
-	sn.Signal()
+	sn.Signal(1)
 
 	select {
 	case <-time.After(3 * time.Second):

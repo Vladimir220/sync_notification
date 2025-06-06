@@ -7,7 +7,7 @@ import (
 
 type ISyncNotification interface {
 	GetWaiting() (waiting IWaiting, err error)
-	Signal()
+	Signal(count uint32)
 	Broadcast()
 	Done(id uint32)
 }
@@ -71,13 +71,21 @@ func (sn *syncNotification) Done(id uint32) {
 	sn.freeIds = append(sn.freeIds, id)
 }
 
-func (sn *syncNotification) Signal() {
+func (sn *syncNotification) Signal(count uint32) {
 	sn.mu.RLock()
 	defer sn.mu.RUnlock()
 
+	if int(count) > len(sn.ch) {
+		count = uint32(len(sn.ch))
+	}
+
+	i := 0
 	for _, ch := range sn.ch {
 		ch <- struct{}{}
-		break
+		i++
+		if i == int(count) {
+			break
+		}
 	}
 }
 
