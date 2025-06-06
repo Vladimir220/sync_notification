@@ -72,6 +72,10 @@ func (sn *syncNotification) Done(id uint32) {
 }
 
 func (sn *syncNotification) Signal(count uint32) {
+	if count == 0 {
+		return
+	}
+
 	sn.mu.RLock()
 	defer sn.mu.RUnlock()
 
