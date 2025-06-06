@@ -27,3 +27,11 @@ type IWaiting interface {
 	GetId() uint32
 }
 ```
+
+### Constructors ###
+```
+func CreateSyncNotification() ISyncNotification
+```
+```
+func CreateWaiting(id uint32, signal <-chan struct{}, sn ISyncNotification) IWaiting
+```
